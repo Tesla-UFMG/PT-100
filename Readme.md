@@ -1,5 +1,5 @@
 # Max31865 library links:
-1 - https://github.com/nimaltd/max31865 (use)
+1 - https://github.com/nimaltd/max31865
 --------------------------------------------------------------------
 This is the MAX31865 STM32 HAL Library
 Based on https://github.com/adafruit/Adafruit_MAX31865
@@ -31,7 +31,7 @@ int main()
 ```
 --------------------------------------------------------------------
 
-2 - https://github.com/4ilo/MAX31865-Stm32HAL
+2 - https://github.com/4ilo/MAX31865-Stm32HAL (used)
 --------------------------------------------------------------------
 MAX31865 temperature readout for stm32 using stm32-hal library's.
 
