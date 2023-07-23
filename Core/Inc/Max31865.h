@@ -1,48 +1,56 @@
-#ifndef _MAX31865_H
-#define _MAX31865_H
+/**
+ * Olivier Van den Eede (4ilo) 2019
+ * This library uses the MAX31865 RTD-to-Digital Converter to measure the temperature using a Pt100 or Pt1000 temperature probe.
+ *
+ * This library is written for Stm32f4 microcontrollers using the stm32-HAL software library.
+ * The usage of software SPI in this library is due to issues with reading data using the SPI-HAL functions.
+ */
+#ifndef MAX31865_LIB_MAX31865_H
+#define MAX31865_LIB_MAX31865_H
 
-/*
-  Author:     Nima Askari
-  WebSite:    http://www.github.com/NimaLTD
-  Instagram:  http://instagram.com/github.NimaLTD
-  Youtube:    https://www.youtube.com/channel/UCUhY7qY1klJm1d2kulr9ckw
+#include "stm32f1xx_hal.h"
 
-  Version:    1.0.0
-
-
-  Reversion History:
-
-  (1.0.0)
-  First Release.
-
-*/
-
-#ifdef __cplusplus
- extern "C" {
-#endif
-
-#include "gpio.h"
-#include "spi.h"
-#include <stdbool.h>
-//#########################################################################################################################
-typedef struct
-{
-  GPIO_TypeDef      *cs_gpio;
-  uint16_t          cs_pin;
-  SPI_HandleTypeDef *spi;
-  uint8_t           lock;
-
-}Max31865_t;
-//#########################################################################################################################
-void  Max31865_init(Max31865_t *max31865,SPI_HandleTypeDef *spi,GPIO_TypeDef  *cs_gpio,uint16_t cs_pin,uint8_t  numwires, uint8_t filterHz);
-bool  Max31865_readTempC(Max31865_t *max31865,float *readTemp);
-bool  Max31865_readTempF(Max31865_t *max31865,float *readTemp);
-float Max31865_Filter(float	newInput, float	lastOutput, float efectiveFactor);
-//#########################################################################################################################
-#ifdef __cplusplus
-}
-#endif
+/********************* MAX31865 registers and config bits *********************/
+#define MAX31865_READ                   0x00
+#define MAX31865_WRITE                  0x80
+#define MAX31856_RTDMSB_REG             0x01
+#define MAX31856_CONFIG_REG             0x00
+#define MAX31856_CONFIG_BIAS            0x80
+#define MAX31856_CONFIG_1SHOT           0x20
+#define MAX31856_CONFIG_3WIRE           0x10
+#define MAX31856_CONFIG_MODEAUTO        0x40
 
 
+/********************* Constants *********************/
+#define RREF 430                        // Reference resistor
+#define FACTOR 32768                    // 2^15 used for data to resistance conversion
+#define ALPHA 0.003851                  // PT-100 temperature coefficient
 
-#endif
+
+/********************* General defines *********************/
+#define ON 1
+#define OFF 0
+#define DELAY(x) HAL_Delay(x)
+
+
+/********************* MAX31865_GPIO pinout struct *********************/
+typedef struct {
+    GPIO_TypeDef *CE_PORT;
+    uint16_t CE_PIN;
+
+    GPIO_TypeDef *CLK_PORT;
+    uint16_t CLK_PIN;
+
+    GPIO_TypeDef *MOSI_PORT;
+    uint16_t MOSI_PIN;
+
+    GPIO_TypeDef *MISO_PORT;
+    uint16_t MISO_PIN;
+} MAX31865_GPIO;
+
+
+/********************* Public functions *********************/
+float MAX31865_readTemp();
+void MAX31865_init(MAX31865_GPIO *max_gpio, uint8_t wires);
+
+#endif //MAX31865_LIB_MAX31865_H
