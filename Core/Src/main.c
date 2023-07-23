@@ -68,15 +68,35 @@ static void MX_SPI1_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	MAX31865_GPIO sensor;
-	sensor.MISO_PIN = GPIO_PIN_6;
-	sensor.MISO_PORT = GPIOA;
-	sensor.MOSI_PIN = GPIO_PIN_7;
-	sensor.MOSI_PORT = GPIOA;
-	sensor.CLK_PIN = GPIO_PIN_5;
-	sensor.CLK_PORT = GPIOA;
-	sensor.CE_PIN = GPIO_PIN_0;
-	sensor.CE_PORT = GPIOB;
+	MAX31865_GPIO sensor1;
+	sensor1.MISO_PIN = GPIO_PIN_6;
+	sensor1.MISO_PORT = GPIOA;
+	sensor1.MOSI_PIN = GPIO_PIN_7;
+	sensor1.MOSI_PORT = GPIOA;
+	sensor1.CLK_PIN = GPIO_PIN_5;
+	sensor1.CLK_PORT = GPIOA;
+	sensor1.CE_PIN = GPIO_PIN_0;
+	sensor1.CE_PORT = GPIOB;
+
+	MAX31865_GPIO sensor2;
+	sensor2.MISO_PIN = GPIO_PIN_6;
+	sensor2.MISO_PORT = GPIOA;
+	sensor2.MOSI_PIN = GPIO_PIN_7;
+	sensor2.MOSI_PORT = GPIOA;
+	sensor2.CLK_PIN = GPIO_PIN_5;
+	sensor2.CLK_PORT = GPIOA;
+	sensor2.CE_PIN = GPIO_PIN_4;
+	sensor2.CE_PORT = GPIOA;
+
+	MAX31865_GPIO sensor3;
+	sensor3.MISO_PIN = GPIO_PIN_6;
+	sensor3.MISO_PORT = GPIOA;
+	sensor3.MOSI_PIN = GPIO_PIN_7;
+	sensor3.MOSI_PORT = GPIOA;
+	sensor3.CLK_PIN = GPIO_PIN_5;
+	sensor3.CLK_PORT = GPIOA;
+	sensor3.CE_PIN = GPIO_PIN_3;
+	sensor3.CE_PORT = GPIOA;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -85,7 +105,9 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  MAX31865_init(&sensor, 2);
+  MAX31865_init(&sensor1, 2);
+  MAX31865_init(&sensor2, 2);
+  MAX31865_init(&sensor3, 2);
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -107,7 +129,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  float temp = MAX31865_readTemp();
+	  float temp1 = MAX31865_readTemp(&sensor1);
+	  float temp2 = MAX31865_readTemp(&sensor2);
+	  float temp3 = MAX31865_readTemp(&sensor3);
+	  HAL_Delay(500);
 
     /* USER CODE END WHILE */
 

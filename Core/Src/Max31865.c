@@ -197,7 +197,7 @@ void MAX31865_init(MAX31865_GPIO *max_gpio, uint8_t wires)
  *
  * @return  Temperature as float
  */
-float MAX31865_readTemp()
+float MAX31865_readTemp(MAX31865_GPIO *gpio)
 {
     // Activate bias voltage to read sensor data, and wait for the capacitors to fill
     enableBias(ON);
@@ -217,7 +217,7 @@ float MAX31865_readTemp()
     data >>= 1;
 
     // Calculate the actual resistance of the sensor
-    float resistance = ((float) data * RREF) / FACTOR;
+    float resistance = ((float)data * RREF) / FACTOR;
 
     // Calculate the temperature from the measured resistance
     float temp = ((resistance / 100) - 1) / ALPHA;
