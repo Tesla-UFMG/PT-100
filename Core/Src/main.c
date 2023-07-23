@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "Max31865.h
+#include "Max31865.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -68,7 +68,15 @@ static void MX_SPI1_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	MAX31865_GPIO sensor;
+	sensor.MISO_PIN = GPIO_PIN_6;
+	sensor.MISO_PORT = GPIOA;
+	sensor.MOSI_PIN = GPIO_PIN_7;
+	sensor.MOSI_PORT = GPIOA;
+	sensor.CLK_PIN = GPIO_PIN_5;
+	sensor.CLK_PORT = GPIOA;
+	sensor.CE_PIN = GPIO_PIN_0;
+	sensor.CE_PORT = GPIOB;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -77,7 +85,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  MAX31865_init(&sensor, 2);
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -99,6 +107,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  float temp = MAX31865_readTemp();
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -198,7 +208,7 @@ static void MX_SPI1_Init(void)
   hspi1.Instance = SPI1;
   hspi1.Init.Mode = SPI_MODE_MASTER;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_16BIT;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
